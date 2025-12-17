@@ -5,8 +5,18 @@ public class Lanterna : MonoBehaviour
 {
     [Header("Dano")]
     public float damagePerSecond = 20f;
-    public float auraRadius = 5f;
+    public float maxAuraRadius = 5f;
     public LayerMask enemyLayer;
+
+    [Header("Combustivel")]
+    public float maxFuel = 100f;
+    public float currentFuel;
+    public float consumptionRate = 5f;
+    public bool isRefilling = false;
+
+    [Header("Efeitos Visuais")]
+    public Light lampLight;
+    public float maxLightIntensity = 5f;
 
     [Header("Sway")]
     public float swayAmount = 2.0f;
@@ -29,13 +39,37 @@ public class Lanterna : MonoBehaviour
     {
         initialPosition = transform.localPosition;
         initialRotation = transform.localRotation;
+        currentFuel = maxFuel;
     }
 
     void Update()
     {
         ApplySway();
         ApplyBobbing();
-        HandleDamage();
+
+        if (!isRefilling && currentFuel > 0)
+        {
+            currentFuel -= consumptionRate * Time.deltaTime;
+        }
+
+        currentFuel = Mathf.Clamp(currentFuel, 0, maxFuel);
+        float fuelPercentage = currentFuel / maxFuel;
+        float currentRadius = maxAuraRadius * fuelPercentage;
+
+        if (lampLight != null)
+        {
+            lampLight.intensity = maxLightIntensity * fuelPercentage;
+        }
+
+        if (currentFuel > 0)
+        {
+            HandleDamage(currentRadius);
+        }
+    }
+
+    public void RefillFuel(float amount)
+    {
+        currentFuel += amount;
     }
 
     void ApplySway()
@@ -71,9 +105,9 @@ public class Lanterna : MonoBehaviour
         }
     }
 
-    void HandleDamage()
+    void HandleDamage(float radius)
     {
-        Collider[] hitEnemies = Physics.OverlapSphere(transform.position, auraRadius, enemyLayer);
+        Collider[] hitEnemies = Physics.OverlapSphere(transform.position, radius, enemyLayer);
 
         foreach (Collider enemyCollider in hitEnemies)
         {
@@ -88,6 +122,13 @@ public class Lanterna : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, auraRadius);
+        Gizmos.DrawWireSphere(transform.position, maxAuraRadius);
+
+        if (Application.isPlaying)
+        {
+            Gizmos.color = Color.red;
+            float currentRadius = maxAuraRadius * (currentFuel / maxFuel);
+            Gizmos.DrawWireSphere(transform.position, currentRadius);
+        }
     }
 }
