@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // Use isso se estiver usando TextMeshPro, senão use apenas Text
+using TMPro;
 
 public class PlayerHUD : MonoBehaviour
 {
@@ -10,17 +10,17 @@ public class PlayerHUD : MonoBehaviour
     public PlayerInventory inventoryScript;
     public LevelSystem levelScript;
 
-    [Header("Elementos de UI - Vida")]
+    [Header("UI - Vida")]
     public Slider healthSlider;
 
-    [Header("Elementos de UI - Experiencia")]
+    [Header("UI - Experiencia")]
     public Slider xpSlider;
     public TextMeshProUGUI levelText;
 
-    [Header("Elementos de UI - Lanterna")]
-    public Slider fuelSlider;
+    [Header("UI - Lanterna (Efeito de Desaparecer)")]
+    public Image lanternaFillImage; 
 
-    [Header("Elementos de UI - Inventario")]
+    [Header("UI - Inventario")]
     public TextMeshProUGUI soulText;
 
     void Update()
@@ -58,10 +58,10 @@ public class PlayerHUD : MonoBehaviour
 
     void UpdateFuel()
     {
-        if (lanternaScript != null && fuelSlider != null)
+        if (lanternaScript != null && lanternaFillImage != null)
         {
-            fuelSlider.maxValue = lanternaScript.maxFuel;
-            fuelSlider.value = lanternaScript.currentFuel;
+            float fuelPercentage = lanternaScript.currentFuel / lanternaScript.maxFuel;
+            lanternaFillImage.fillAmount = fuelPercentage;
         }
     }
 
