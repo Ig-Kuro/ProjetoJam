@@ -5,46 +5,53 @@ using System.Collections.Generic;
 public class SegmentedXPBar : MonoBehaviour
 {
     public LevelSystem levelScript;
-    public GameObject segmentPrefab; 
+    public GameObject segmentPrefab;
     public Color activeColor = Color.cyan;
     public Color inactiveColor = new Color(0.2f, 0.2f, 0.2f, 1f);
 
-    public float xpPerSegment = 10f; 
+    public float xpPerSegment = 10f;
+    public int maxPossibleSegments = 100; 
+
     private List<Image> segments = new List<Image>();
 
-    void Update()
+    void Start()
     {
-        if (levelScript == null) return;
-
-        int requiredSegments = Mathf.CeilToInt(levelScript.xpToNextLevel / xpPerSegment);
-
-        UpdateSegmentCount(requiredSegments);
-
-        float currentXp = levelScript.currentXp;
-        for (int i = 0; i < segments.Count; i++)
+        for (int i = 0; i < maxPossibleSegments; i++)
         {
-            float segmentStartBound = i * xpPerSegment;
-
-            if (currentXp >= segmentStartBound + xpPerSegment)
-                segments[i].color = activeColor; 
-            else if (currentXp > segmentStartBound)
-                segments[i].color = Color.Lerp(inactiveColor, activeColor, (currentXp - segmentStartBound) / xpPerSegment); // Parcial
-            else
-                segments[i].color = inactiveColor;
+            GameObject newSeg = Instantiate(segmentPrefab, transform);
+            newSeg.SetActive(false); 
+            segments.Add(newSeg.GetComponent<Image>());
         }
     }
 
-    void UpdateSegmentCount(int count)
+    void Update()
     {
-        while (segments.Count < count)
+        if (levelScript == null || segments.Count == 0) return;
+
+        int requiredSegments = Mathf.CeilToInt(levelScript.xpToNextLevel / xpPerSegment);
+
+        int limit = Mathf.Min(requiredSegments, segments.Count);
+
+        float currentXp = levelScript.currentXp;
+
+        for (int i = 0; i < segments.Count; i++)
         {
-            GameObject newSeg = Instantiate(segmentPrefab, transform);
-            segments.Add(newSeg.GetComponent<Image>());
-        }
-        while (segments.Count > count)
-        {
-            Destroy(segments[segments.Count - 1].gameObject);
-            segments.RemoveAt(segments.Count - 1);
+            if (i < limit)
+            {
+                segments[i].gameObject.SetActive(true);
+                float segmentStartBound = i * xpPerSegment;
+
+                if (currentXp >= segmentStartBound + xpPerSegment)
+                    segments[i].color = activeColor;
+                else if (currentXp > segmentStartBound)
+                    segments[i].color = Color.Lerp(inactiveColor, activeColor, (currentXp - segmentStartBound) / xpPerSegment);
+                else
+                    segments[i].color = inactiveColor;
+            }
+            else
+            {
+                segments[i].gameObject.SetActive(false);
+            }
         }
     }
 }

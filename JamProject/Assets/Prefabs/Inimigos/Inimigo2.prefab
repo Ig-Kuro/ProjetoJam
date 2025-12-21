@@ -256,6 +256,7 @@ MonoBehaviour:
   xpReward: 20
   health: 50
   attackRate: 1
+  damagePopupPrefab: {fileID: 7240350603975400505, guid: b6b372ce58b8f414cab0a4d3c117efc3, type: 3}
   attackHitbox: {fileID: 4425741833745471495}
   delayBeforeDamage: 1
   hitboxDuration: 10
