@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
 {
     private NavMeshAgent agent;
     private Transform player;
+    private Animator anim; 
 
     [Header("Status")]
     public float health = 50f;
@@ -27,6 +28,8 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        anim = GetComponent<Animator>(); // Inicializa o Animator
+
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
         if (playerObject != null) player = playerObject.transform;
 
@@ -38,6 +41,13 @@ public class Enemy : MonoBehaviour
         if (player != null && health > 0)
         {
             agent.SetDestination(player.position);
+
+           
+            if (anim != null)
+            {
+                anim.SetFloat("Speed", agent.velocity.magnitude);
+            }
+
             if (Vector3.Distance(transform.position, player.position) <= agent.stoppingDistance)
             {
                 if (Time.time >= nextAttackTime)
@@ -55,20 +65,19 @@ public class Enemy : MonoBehaviour
     {
         health -= amount;
 
+
         if (damagePopupPrefab != null)
         {
             Vector3 spawnPos = transform.position + Vector3.up * 0.1f;
             GameObject popup = Instantiate(damagePopupPrefab, spawnPos, Quaternion.identity);
             DamagePopup script = popup.GetComponent<DamagePopup>();
-            if (script != null)
-            {
-                script.Setup(amount);
-            }
+            if (script != null) script.Setup(amount);
         }
     }
 
     IEnumerator PerformAttack()
     {
+        if (anim != null) anim.SetTrigger("Attack");
         yield return new WaitForSeconds(delayBeforeDamage);
         if (attackHitbox != null)
         {

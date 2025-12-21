@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Xp
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
   nome: xp
-  icone: {fileID: 21300000, guid: aecf182f040dccf43b9d8fd405b2957a, type: 3}
+  icone: {fileID: 21300000, guid: 18ba3904c45229c4699ad8ced8bd9a99, type: 3}
   tipo: 5
   valor: 0.02
-  nivelAtual: 0
+  nivelAtual: 1
   nivelMaximo: 5
   custoBase: 5

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Velocidade
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
   nome: Velocidade
-  icone: {fileID: 21300000, guid: bc273bdc190e9204393c5931bc19bf29, type: 3}
+  icone: {fileID: 21300000, guid: f3eba7ef36379a244b7e1a8525696299, type: 3}
   tipo: 2
   valor: 1.5
   nivelAtual: 0

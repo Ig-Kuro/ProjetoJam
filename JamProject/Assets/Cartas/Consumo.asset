@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Consumo
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
   nome: Consumo
-  icone: {fileID: 21300000, guid: 2ef15ff5d352b134198fbcfb5b5ef714, type: 3}
+  icone: {fileID: 21300000, guid: 724779badef9ef240b0ea350cdd8c92e, type: 3}
   tipo: 4
   valor: 0.5
   nivelAtual: 0
