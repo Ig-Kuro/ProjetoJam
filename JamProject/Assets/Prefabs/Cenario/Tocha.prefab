@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2966770505788471115}
-  - component: {fileID: 4281065257717152016}
   m_Layer: 0
   m_Name: Tocha
   m_TagString: Untagged
@@ -33,27 +32,6 @@ Transform:
   - {fileID: 1252629984197135325}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &4281065257717152016
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469367430103968111}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.07398847, y: 0.27597588, z: 0.073774934}
-  m_Center: {x: -0.0009788424, y: -0.02608174, z: -0.0034323037}
 --- !u!1 &6493676395501706555
 GameObject:
   m_ObjectHideFlags: 0
