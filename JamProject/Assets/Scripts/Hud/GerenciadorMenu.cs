@@ -11,6 +11,7 @@ public class GerenciadorMenu : MonoBehaviour
     public GameObject painelHUD;
     public GameObject painelCreditos;
     public GameObject contadorAlmas;
+    public RectTransform painelDasCartas;
     public CanvasGroup fadeScreen;
 
     [Header("Volumes")]
@@ -20,8 +21,16 @@ public class GerenciadorMenu : MonoBehaviour
     public MonoBehaviour playerMovement;
     public MonoBehaviour scriptLanterna;
 
+    [Header("Configurações do Skybox")]
+    public bool mudarSkyboxAoIniciar = true;
+    public float atmosferaMenu = 1.0f;    
+    public float atmosferaJogo = 0.5f;     
+    public float transicaoDuracao = 2.0f;  
+
     private void Start()
     {
+        RenderSettings.skybox.SetFloat("_AtmosphereThickness", atmosferaMenu);
+
         ConfigurarMenuInicial();
         StartCoroutine(ExecutarFade(0f));
     }
@@ -50,17 +59,8 @@ public class GerenciadorMenu : MonoBehaviour
         StartCoroutine(RotinaTransicaoJogo());
     }
 
-    public void Botao_ChamarCreditos()
-    {
-        StopAllCoroutines();
-        StartCoroutine(RotinaCreditos(true));
-    }
-
-    public void Botao_FecharCreditos()
-    {
-        StopAllCoroutines();
-        StartCoroutine(RotinaCreditos(false));
-    }
+    public void Botao_ChamarCreditos() { StopAllCoroutines(); StartCoroutine(RotinaCreditos(true)); }
+    public void Botao_FecharCreditos() { StopAllCoroutines(); StartCoroutine(RotinaCreditos(false)); }
 
     private IEnumerator RotinaTransicaoJogo()
     {
@@ -72,32 +72,49 @@ public class GerenciadorMenu : MonoBehaviour
 
         painelHUD.SetActive(true);
         if (contadorAlmas != null) contadorAlmas.SetActive(true);
-               
+
+        if (painelDasCartas != null)
+        {
+            yield return new WaitForEndOfFrame();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(painelDasCartas);
+        }
+
         if (playerMovement != null) playerMovement.enabled = true;
-        if (scriptLanterna != null) scriptLanterna.enabled = true; 
+        if (scriptLanterna != null) scriptLanterna.enabled = true;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        if (mudarSkyboxAoIniciar)
+        {
+            StartCoroutine(TransicaoSkybox(atmosferaMenu, atmosferaJogo));
+        }
 
         yield return new WaitForSeconds(0.5f);
         yield return StartCoroutine(ExecutarFade(0f));
     }
 
+    private IEnumerator TransicaoSkybox(float valorInicial, float valorFinal)
+    {
+        float tempo = 0;
+        while (tempo < transicaoDuracao)
+        {
+            tempo += Time.deltaTime;
+            float valorAtual = Mathf.Lerp(valorInicial, valorFinal, tempo / transicaoDuracao);
+
+            RenderSettings.skybox.SetFloat("_AtmosphereThickness", valorAtual);
+
+         
+
+            yield return null;
+        }
+    }
+
     private IEnumerator RotinaCreditos(bool abrir)
     {
         yield return StartCoroutine(ExecutarFade(1f));
-
-        if (abrir)
-        {
-            painelMenu.SetActive(false);
-            painelCreditos.SetActive(true);
-        }
-        else
-        {
-            painelCreditos.SetActive(false);
-            painelMenu.SetActive(true);
-        }
-
+        if (abrir) { painelMenu.SetActive(false); painelCreditos.SetActive(true); }
+        else { painelCreditos.SetActive(false); painelMenu.SetActive(true); }
         yield return new WaitForSeconds(0.2f);
         yield return StartCoroutine(ExecutarFade(0f));
     }

@@ -805,6 +805,10 @@ MonoBehaviour:
   volumeMenu: {fileID: 1811150360}
   playerMovement: {fileID: 1248777885}
   scriptLanterna: {fileID: 1248777886}
+  mudarSkyboxAoIniciar: 1
+  atmosferaMenu: 1
+  atmosferaJogo: 0.2
+  transicaoDuracao: 10
 --- !u!4 &975610183
 Transform:
   m_ObjectHideFlags: 0
